@@ -1,133 +1,116 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { TextureLoader } from 'three';
 import { motion } from 'framer-motion';
 import heroImage from './assets/hero.jpg';
 import { RocketLaunchIcon, PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
-// Animation variants for Framer Motion
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.2, when: 'beforeChildren' }
-  }
-};
-const itemVariants = {
+// Fade-in animation for content
+const fadeIn = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
 };
+
+// 3D Sphere with hero texture
+function MemeSphere() {
+  const texture = useLoader(TextureLoader, heroImage);
+  const meshRef = useRef();
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += 0.005;
+      meshRef.current.rotation.x += 0.002;
+    }
+  });
+  return (
+    <mesh ref={meshRef} position={[0, 0, 0]}>
+      <sphereGeometry args={[2.5, 64, 64]} />
+      <meshStandardMaterial map={texture} metalness={0.3} roughness={0.7} />
+    </mesh>
+  );
+}
 
 export default function App() {
-  // Confetti on Buy click
-  const handleBuyClick = () => {
-    import('canvas-confetti').then(({ default: confetti }) => {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    });
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden">
-      {/* Hero Section */}
-      <div className="relative w-full h-screen">
-        {/* Background Image */}
-        <img
-          src={heroImage}
-          alt="Hero"
-          loading="lazy"
-          className="absolute inset-0 w-full h-full object-contain object-center"
-        />
-        {/* Subtle bottom gradient */}
-        <div className="absolute bottom-0 w-full h-1/6 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+    <div className="relative min-h-screen w-full overflow-hidden">
+      {/* Full‐screen Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${heroImage})` }}
+      />
 
-        {/* Floating playful circles */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(15)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="bg-green-400 opacity-30 rounded-full"
-              style={{
-                width: 20 + Math.random() * 30,
-                height: 20 + Math.random() * 30,
-                top: Math.random() * 100 + '%',
-                left: Math.random() * 100 + '%'
-              }}
-              animate={{ y: ['0%', '10%', '0%'] }}
-              transition={{ duration: 3 + Math.random() * 2, repeat: Infinity, ease: 'easeInOut' }}
-            />
-          ))}
-        </div>
+      {/* 3D Canvas Layer */}
+      <Canvas className="absolute inset-0 z-0" camera={{ position: [0, 0, 8], fov: 50 }}>
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 5, 5]} intensity={1} />
+        <MemeSphere />
+      </Canvas>
 
-        {/* Content */}
+      {/* Dark overlay for contrast */}
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+
+      {/* Central Content */}
+      <motion.div
+        className="relative z-10 flex flex-col items-center justify-center h-screen text-center px-4"
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+      >
+        {/* Moving Title with Emojis */}
         <motion.div
-          className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4"
-          initial="hidden"
-          animate="show"
-          variants={containerVariants}
+          className="flex items-center space-x-2 text-white mb-4"
+          animate={{ x: ['-5%', '5%', '-5%'] }}
+          transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
         >
-          {/* Title Emojis */}
-          <motion.div className="flex items-center space-x-4 mb-4" variants={itemVariants}>
-            <motion.span animate={{ rotate: [0, 15, -15, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-4xl">🍌</motion.span>
-            <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} className="text-4xl">😂</motion.span>
-            <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ repeat: Infinity, duration: 2 }} className="text-4xl">✨</motion.span>
-            <motion.span animate={{ x: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-4xl">🚀</motion.span>
-          </motion.div>
-
-          {/* Title */}
-          <motion.h1
-            className="font-extrabold text-white drop-shadow-lg"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)' }}
-            variants={itemVariants}
-          >
+          <span className="text-3xl animate-spin-slow">🍌</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold uppercase drop-shadow-lg">
             PEPPES CTO
-          </motion.h1>
-
-          {/* Subtitle Emojis */}
-          <motion.div className="flex items-center space-x-4 mt-4 mb-2" variants={itemVariants}>
-            <motion.span animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-2xl">🤖</motion.span>
-            <motion.span animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} className="text-2xl">🤣</motion.span>
-            <motion.span animate={{ rotate: [0, 20, -20, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-2xl">💰</motion.span>
-            <motion.span animate={{ x: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-2xl">🪙</motion.span>
-          </motion.div>
-
-          {/* Subtitle */}
-          <motion.p
-            className="text-white/80 mb-6"
-            style={{ fontSize: 'clamp(1rem, 3vw, 1.5rem)' }}
-            variants={itemVariants}
-          >
-            First CTO on ZORA
-          </motion.p>
-
-          {/* Buttons with confetti */}
-          <motion.div className="flex flex-col sm:flex-row items-center gap-6" variants={itemVariants}>
-            <button
-              onClick={handleBuyClick}
-              className="flex items-center px-8 py-4 text-lg font-medium text-white bg-gradient-to-r from-green-500 to-green-600 rounded-full shadow-2xl transform transition duration-300 hover:from-green-600 hover:to-green-700 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-400/50"
-            >
-              <RocketLaunchIcon className="h-6 w-6 mr-3" /> Buy on Zora
-            </button>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center px-6 py-3 text-lg font-medium text-[#0088cc] bg-white/10 backdrop-blur-sm rounded-full shadow-inner transition duration-300 hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-[#0088cc]/50"
-            >
-              <PaperAirplaneIcon className="h-5 w-5 mr-2" /> Telegram
-            </a>
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center px-6 py-3 text-lg font-medium text-[#1DA1F2] bg-white/10 backdrop-blur-sm rounded-full shadow-inner transition duration-300 hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-[#1DA1F2]/50"
-            >
-              <XMarkIcon className="h-5 w-5 mr-2" /> X (Twitter)
-            </a>
-          </motion.div>
+          </h1>
+          <span className="text-3xl animate-spin-slow">🚀</span>
+          <span className="text-3xl animate-ping">🌕</span>
         </motion.div>
-      </div>
+
+        {/* Subtitle */}
+        <p className="text-white/90 text-lg sm:text-xl">First CTO on ZORA</p>
+        <p className="italic text-white/80 text-sm sm:text-base mb-8">
+          “Changing the chain one meme at a time.”
+        </p>
+
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-lg">
+          <a
+            href="https://zora.co/coin/base:0xa6ae99cd86142ab5f9e7796ec22cf6b4b80a8bfc?referrer=0x331931f4ba7eabc4af1770acc9e1fdc7581b7270"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105"
+          >
+            <RocketLaunchIcon className="h-5 w-5 mr-2" />
+            Buy on Zora
+          </a>
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-white text-[#0088cc] font-semibold rounded-full shadow transition-colors hover:bg-[#f0f8ff]"
+          >
+            <PaperAirplaneIcon className="h-5 w-5 mr-2" />
+            Telegram
+          </a>
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-white text-[#1DA1F2] font-semibold rounded-full shadow transition-colors hover:bg-[#e6f7ff]"
+          >
+            <XMarkIcon className="h-5 w-5 mr-2" />
+            X (Twitter)
+          </a>
+        </div>
+      </motion.div>
     </div>
   );
 }
+
+/**
+ * To install the required 3D libraries compatible with React 18:
+ * npm install three @react-three/fiber@8 framer-motion
+ */

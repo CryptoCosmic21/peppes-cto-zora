@@ -4,9 +4,9 @@
 
 /* Animated gradient background keyframes */
 @keyframes gradientBG {
-  0%   { background-position:   0% 50%; }
+  0%   { background-position: 0% 50%; }
   50%  { background-position: 100% 50%; }
-  100% { background-position:   0% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Slow bounce keyframes for icons/text */
@@ -25,13 +25,4 @@
 
 .animate-bounce-slow {
   animation: bounceSlow 3s ease-in-out infinite;
-}
-
-.hero-watermark {
-  @apply absolute inset-0 flex items-center justify-center text-center;
-  font-size: 8rem;
-  color: rgba(255,255,255,0.05);
-  font-weight: bold;
-  pointer-events: none;
-  user-select: none;
 }

@@ -11,8 +11,18 @@ const fadeIn = {
 
 export default function App() {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Responsive Background Image: contain on mobile, cover on larger screens */}
+    <div
+      className="relative w-full min-h-screen overflow-hidden"
+      style={{
+        // Safe-area insets for iPhone
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }}
+    >
+      {/* 1) Gradient Animated Background */}
+      <div className="gradient-bg-anim" />
+
+      {/* 2) Hero Image (over the gradient) */}
       <img
         src={heroImage}
         alt="Hero"
@@ -35,7 +45,7 @@ export default function App() {
           animate={{ x: ['-5%', '5%', '-5%'] }}
           transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
         >
-          <span className="text-3xl animate-spin-slow">🍌</span>
+          <span className="text-3xl animate-bounce-slow">🍌</span>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold uppercase drop-shadow-lg">
             PEPPES CTO
           </h1>
@@ -57,13 +67,13 @@ export default function App() {
             href="https://zora.co/coin/base:0xa6ae99cd86142ab5f9e7796ec22cf6b4b80a8bfc?referrer=0x331931f4ba7eabc4af1770acc9e1fdc7581b7270"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105"
+            className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-semibold rounded-full shadow-lg transition-transform hover:scale-105"
           >
             <RocketLaunchIcon className="h-5 w-5 mr-2" />
             Buy on Zora
           </a>
           <a
-            href="#"
+            href="https://t.me/+nxJfGcCSmuM4NWE0"
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-white text-[#0088cc] font-semibold rounded-full shadow transition-colors hover:bg-[#f0f8ff]"
@@ -72,7 +82,7 @@ export default function App() {
             Telegram
           </a>
           <a
-            href="#"
+            href="https://x.com/PeppesCto"
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 inline-flex items-center justify-center px-6 py-3 bg-white text-[#1DA1F2] font-semibold rounded-full shadow transition-colors hover:bg-[#e6f7ff]"

@@ -17,10 +17,21 @@ const itemVariants = {
 };
 
 export default function App() {
+  // Confetti on Buy click
+  const handleBuyClick = () => {
+    import('canvas-confetti').then(({ default: confetti }) => {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    });
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden">
       {/* Hero Section */}
-      <div className="relative w-full h-screen overflow-hidden">
+      <div className="relative w-full h-screen">
         {/* Background Image */}
         <img
           src={heroImage}
@@ -28,9 +39,26 @@ export default function App() {
           loading="lazy"
           className="absolute inset-0 w-full h-full object-contain object-center"
         />
-        />
         {/* Subtle bottom gradient */}
         <div className="absolute bottom-0 w-full h-1/6 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+
+        {/* Floating playful circles */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(15)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="bg-green-400 opacity-30 rounded-full"
+              style={{
+                width: 20 + Math.random() * 30,
+                height: 20 + Math.random() * 30,
+                top: Math.random() * 100 + '%',
+                left: Math.random() * 100 + '%'
+              }}
+              animate={{ y: ['0%', '10%', '0%'] }}
+              transition={{ duration: 3 + Math.random() * 2, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          ))}
+        </div>
 
         {/* Content */}
         <motion.div
@@ -41,10 +69,10 @@ export default function App() {
         >
           {/* Title Emojis */}
           <motion.div className="flex items-center space-x-4 mb-4" variants={itemVariants}>
-            <span className="text-4xl">🍌</span>
-            <span className="text-4xl">😂</span>
-            <span className="text-4xl">✨</span>
-            <span className="text-4xl">🚀</span>
+            <motion.span animate={{ rotate: [0, 15, -15, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-4xl">🍌</motion.span>
+            <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} className="text-4xl">😂</motion.span>
+            <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ repeat: Infinity, duration: 2 }} className="text-4xl">✨</motion.span>
+            <motion.span animate={{ x: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-4xl">🚀</motion.span>
           </motion.div>
 
           {/* Title */}
@@ -58,10 +86,10 @@ export default function App() {
 
           {/* Subtitle Emojis */}
           <motion.div className="flex items-center space-x-4 mt-4 mb-2" variants={itemVariants}>
-            <span className="text-2xl">🤖</span>
-            <span className="text-2xl">🤣</span>
-            <span className="text-2xl">💰</span>
-            <span className="text-2xl">🪙</span>
+            <motion.span animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-2xl">🤖</motion.span>
+            <motion.span animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} className="text-2xl">🤣</motion.span>
+            <motion.span animate={{ rotate: [0, 20, -20, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-2xl">💰</motion.span>
+            <motion.span animate={{ x: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="text-2xl">🪙</motion.span>
           </motion.div>
 
           {/* Subtitle */}
@@ -73,39 +101,29 @@ export default function App() {
             First CTO on ZORA
           </motion.p>
 
-          {/* Buttons */}
+          {/* Buttons with confetti */}
           <motion.div className="flex flex-col sm:flex-row items-center gap-6" variants={itemVariants}>
-            {/* Buy on Zora Primary Button */}
-            <a
-              href="https://zora.co/coin/base:0xa6ae99cd86142ab5f9e7796ec22cf6b4b80a8bfc?referrer=0x331931f4ba7eabc4af1770acc9e1fdc7581b7270"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={handleBuyClick}
               className="flex items-center px-8 py-4 text-lg font-medium text-white bg-gradient-to-r from-green-500 to-green-600 rounded-full shadow-2xl transform transition duration-300 hover:from-green-600 hover:to-green-700 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-400/50"
             >
-              <RocketLaunchIcon className="h-6 w-6 mr-3" />
-              Buy on Zora
-            </a>
-
-            {/* Telegram Secondary Button */}
+              <RocketLaunchIcon className="h-6 w-6 mr-3" /> Buy on Zora
+            </button>
             <a
               href="#"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center px-6 py-3 text-lg font-medium text-[#0088cc] bg-white/10 backdrop-blur-sm rounded-full shadow-inner transition duration-300 hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-[#0088cc]/50"
             >
-              <PaperAirplaneIcon className="h-5 w-5 mr-2" />
-              Telegram
+              <PaperAirplaneIcon className="h-5 w-5 mr-2" /> Telegram
             </a>
-
-            {/* Twitter/X Secondary Button */}
             <a
               href="#"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center px-6 py-3 text-lg font-medium text-[#1DA1F2] bg-white/10 backdrop-blur-sm rounded-full shadow-inner transition duration-300 hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-[#1DA1F2]/50"
             >
-              <XMarkIcon className="h-5 w-5 mr-2" />
-              X (Twitter)
+              <XMarkIcon className="h-5 w-5 mr-2" /> X (Twitter)
             </a>
           </motion.div>
         </motion.div>

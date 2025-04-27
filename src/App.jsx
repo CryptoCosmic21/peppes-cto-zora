@@ -1,54 +1,28 @@
-import React, { useRef } from 'react';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
-import { TextureLoader } from 'three';
+import React from 'react';
 import { motion } from 'framer-motion';
-import heroImage from './assets/hero.jpg';
 import { RocketLaunchIcon, PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import heroImage from './assets/hero.jpg';
 
 // Fade-in animation for content
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
 };
-
-// 3D Sphere with hero texture
-function MemeSphere() {
-  const texture = useLoader(TextureLoader, heroImage);
-  const meshRef = useRef();
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.005;
-      meshRef.current.rotation.x += 0.002;
-    }
-  });
-  return (
-    <mesh ref={meshRef} position={[0, 0, 0]}>
-      <sphereGeometry args={[2.5, 64, 64]} />
-      <meshStandardMaterial map={texture} metalness={0.3} roughness={0.7} />
-    </mesh>
-  );
-}
 
 export default function App() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
-      {/* Full‐screen Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroImage})` }}
+      {/* Responsive Background Image: contain on mobile, cover on larger screens */}
+      <img
+        src={heroImage}
+        alt="Hero"
+        className="absolute inset-0 w-full h-full object-contain sm:object-cover"
       />
 
-      {/* 3D Canvas Layer */}
-      <Canvas className="absolute inset-0 z-0" camera={{ position: [0, 0, 8], fov: 50 }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} intensity={1} />
-        <MemeSphere />
-      </Canvas>
-
-      {/* Dark overlay for contrast */}
+      {/* Dark overlay for text contrast */}
       <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
-      {/* Central Content */}
+      {/* Hero Content */}
       <motion.div
         className="relative z-10 flex flex-col items-center justify-center h-screen text-center px-4"
         initial="hidden"
@@ -70,13 +44,15 @@ export default function App() {
         </motion.div>
 
         {/* Subtitle */}
-        <p className="text-white/90 text-lg sm:text-xl">First CTO on ZORA</p>
+        <p className="text-white/90 text-lg sm:text-xl">
+          First CTO on ZORA
+        </p>
         <p className="italic text-white/80 text-sm sm:text-base mb-8">
           “Changing the chain one meme at a time.”
         </p>
 
         {/* Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-lg">
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-lg mx-auto">
           <a
             href="https://zora.co/coin/base:0xa6ae99cd86142ab5f9e7796ec22cf6b4b80a8bfc?referrer=0x331931f4ba7eabc4af1770acc9e1fdc7581b7270"
             target="_blank"
@@ -109,8 +85,3 @@ export default function App() {
     </div>
   );
 }
-
-/**
- * To install the required 3D libraries compatible with React 18:
- * npm install three @react-three/fiber@8 framer-motion
- */

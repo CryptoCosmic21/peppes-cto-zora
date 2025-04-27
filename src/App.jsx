@@ -1,88 +1,101 @@
 import React from 'react';
-import heroImage from './assets/hero.jpg'; // your hero graphic
-import {
-  RocketLaunchIcon,
-  PaperAirplaneIcon,
-  XMarkIcon,
-  ShoppingCartIcon
-} from '@heroicons/react/24/solid';
+import { motion } from 'framer-motion';
+import heroImage from './assets/hero.jpg';
+import { RocketLaunchIcon, PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/solid';
+
+// Animation variants for Framer Motion
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2, when: 'beforeChildren' }
+  }
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } }
+};
 
 export default function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Hero */}
+    <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      {/* Hero Section */}
       <div className="relative w-full h-screen overflow-hidden">
-        {/* Full‐screen responsive hero image */}
+        {/* Background Image with lazy load */}
         <img
           src={heroImage}
           alt="Hero"
+          loading="lazy"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
+        {/* Subtle bottom gradient for text contrast */}
+        <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
 
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-50" />
+        {/* Animated Content Container */}
+        <motion.div
+          className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4"
+          initial="hidden"
+          animate="show"
+          variants={containerVariants}
+        >
+          {/* Emojis Around Title */}
+          <motion.div className="flex items-center space-x-4 mb-4" variants={itemVariants}>
+            <span className="text-4xl">🍌</span>
+            <span className="text-4xl">😂</span>
+            <span className="text-4xl">✨</span>
+            <span className="text-4xl">🚀</span>
+          </motion.div>
 
-        {/* Animated gradient (blended lightly over image) */}
-        <div className="absolute inset-0 gradient-bg-anim mix-blend-lighten" />
+          {/* Title with responsive clamp */}
+          <motion.h1
+            className="font-bold text-white drop-shadow-lg"
+            style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)' }}
+            variants={itemVariants}
+          >
+            PEPPES CTO
+          </motion.h1>
 
-        {/* Giant subtle watermark */}
-        <h2 className="hero-watermark">PEPPES CTO</h2>
+          {/* Emojis Below Title */}
+          <motion.div className="flex items-center space-x-4 mt-4" variants={itemVariants}>
+            <span className="text-2xl">🤖</span>
+            <span className="text-2xl">🤣</span>
+            <span className="text-2xl">💰</span>
+            <span className="text-2xl">🪙</span>
+          </motion.div>
 
-        {/* Centered content */}
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 space-y-4">
-          {/* Sparkly heading */}
-          <div className="flex items-center space-x-2">
-            <span className="text-2xl animate-bounce">✨</span>
-            <h1 className="text-5xl sm:text-6xl font-extrabold uppercase text-transparent bg-clip-text bg-gradient-to-r from-green-200 via-white to-green-200 drop-shadow-lg animate-pulse">
-              PEPPES CTO
-            </h1>
-            <span className="text-2xl animate-bounce">✨</span>
-          </div>
-
-          {/* Subtitle and meme quote */}
-          <p className="text-lg sm:text-2xl text-white/90 animate-bounce">
+          {/* Subtitle */}
+          <motion.p className="mt-2 text-white/90" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }} variants={itemVariants}>
             First CTO on ZORA
-          </p>
-          <p className="italic text-sm sm:text-base text-white/70">
-            “Changing the chain one meme at a time.”
-          </p>
+          </motion.p>
 
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
-            {/* Primary CTA */}
+          <motion.div className="mt-6 flex flex-col sm:flex-row items-center gap-4" variants={itemVariants}>
             <a
               href="https://zora.co/coin/base:0xa6ae99cd86142ab5f9e7796ec22cf6b4b80a8bfc?referrer=0x331931f4ba7eabc4af1770acc9e1fdc7581b7270"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center px-8 py-4 bg-gradient-to-r from-green-200 to-green-400 text-black font-bold rounded-full shadow-2xl transition transform hover:-translate-y-1 hover:scale-105 hover:from-yellow-200 hover:to-yellow-400"
+              className="flex items-center px-6 py-3 bg-green-600 text-white font-semibold rounded-full shadow-md hover:bg-green-700 transition-colors"
             >
-              <RocketLaunchIcon className="h-6 w-6 mr-2 animate-bounce-slow" />
-              Buy on Zora
+              <RocketLaunchIcon className="h-5 w-5 mr-2" /> Buy on Zora
             </a>
-
-            {/* Telegram */}
             <a
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center px-6 py-3 bg-white text-[#0088cc] font-semibold rounded-full shadow transition hover:bg-[#0088cc] hover:text-white"
+              className="flex items-center px-6 py-3 bg-white text-[#0088cc] font-semibold rounded-full shadow-md hover:bg-[#0088cc] hover:text-white transition-colors"
             >
-              <PaperAirplaneIcon className="h-5 w-5 mr-2" />
-              Telegram
+              <PaperAirplaneIcon className="h-5 w-5 mr-2" /> Telegram
             </a>
-
-            {/* X / Twitter */}
             <a
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center px-6 py-3 bg-white text-[#1DA1F2] font-semibold rounded-full shadow transition hover:bg-[#1DA1F2] hover:text-white"
+              className="flex items-center px-6 py-3 bg-white text-[#1DA1F2] font-semibold rounded-full shadow-md hover:bg-[#1DA1F2] hover:text-white transition-colors"
             >
-              <XMarkIcon className="h-5 w-5 mr-2" />
-              X (Twitter)
+              <XMarkIcon className="h-5 w-5 mr-2" /> X (Twitter)
             </a>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

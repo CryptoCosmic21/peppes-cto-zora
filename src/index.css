@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Animated gradient background keyframes */
+@keyframes gradientBG {
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
+}
+
+/* Slow bounce keyframes for icons/text */
+@keyframes bounceSlow {
+  0%, 100% { transform: translateY(-5%); }
+  50%      { transform: translateY(0); }
+}
+
+/* Utility classes */
+.gradient-bg-anim {
+  @apply absolute inset-0;
+  background: linear-gradient(-45deg, #16a34a, #22c55e, #a7f3d0, #4ade80);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounceSlow 3s ease-in-out infinite;
+}
+
+.hero-watermark {
+  @apply absolute inset-0 flex items-center justify-center text-center;
+  font-size: 8rem;
+  color: rgba(255,255,255,0.05);
+  font-weight: bold;
+  pointer-events: none;
+  user-select: none;
+}
